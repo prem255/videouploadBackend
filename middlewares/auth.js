@@ -25,6 +25,7 @@ module.exports = async (req, res, next) => {
                 return sendResponse(res, 403, "Invalid Token.");
             }
             req.user = decoded;
+            console.log("val",decoded)
             next();
         } catch (err) {
             console.error("Error in middleware", err);

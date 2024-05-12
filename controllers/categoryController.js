@@ -3,9 +3,12 @@ const Category = require("../models/category");
 exports.createCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
-    if (!name || !description) return res
-      .status(400)
-      .json({ error: "Incomplete request,name and description are required" });
+    if (!name || !description)
+      return res
+        .status(400)
+        .json({
+          error: "Incomplete request,name and description are required",
+        });
     if (name.length > 30)
       return res.status(400).json({ error: "Invalid name" });
     if (description.length > 200)
@@ -15,7 +18,10 @@ exports.createCategory = async (req, res) => {
     await category.save();
     return res.status(201).json(category);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    if (error.name.includes("E11000"))
+      return res.status(500).json({ error: "Duplicate key" });
+
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };
 

@@ -22,7 +22,7 @@ const login = async (req, res) => {
     let user = await User.findOne(searchBody);
     console.log(user)
     if (user) {
-      if (compareHash(password, user.password))
+      if (await compareHash(password, user.password))
         return sendResponse(res, 403, "Invalid Credentials");
       else {
         const token = jwt.sign({ email: user.email, isLogin: 1 }, jwtSecret);
